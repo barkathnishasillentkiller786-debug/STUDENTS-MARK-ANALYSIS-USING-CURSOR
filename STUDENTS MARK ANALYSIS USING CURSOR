@@ -1,0 +1,53 @@
+```sql
+-- Create Student table
+CREATE TABLE Student (
+    RollNo NUMBER PRIMARY KEY,
+    Name VARCHAR2(30),
+    Marks NUMBER
+);
+
+-- Insert student records
+INSERT INTO Student VALUES (1, 'Nisha', 90);
+INSERT INTO Student VALUES (2, 'Ayesha', 75);
+INSERT INTO Student VALUES (3, 'Rahul', 35);
+INSERT INTO Student VALUES (4, 'Priya', 82);
+INSERT INTO Student VALUES (5, 'Arun', 25);
+
+-- PL/SQL program using cursor
+SET SERVEROUTPUT ON;
+
+DECLARE
+    CURSOR student_cursor IS
+        SELECT RollNo, Name, Marks FROM Student;
+
+    v_rollno Student.RollNo%TYPE;
+    v_name   Student.Name%TYPE;
+    v_marks  Student.Marks%TYPE;
+BEGIN
+    OPEN student_cursor;
+
+    LOOP
+        FETCH student_cursor
+        INTO v_rollno, v_name, v_marks;
+
+        EXIT WHEN student_cursor%NOTFOUND;
+
+        DBMS_OUTPUT.PUT_LINE(
+            'Roll No: ' || v_rollno ||
+            ', Name: ' || v_name ||
+            ', Marks: ' || v_marks
+        );
+
+        IF v_marks >= 50 THEN
+            DBMS_OUTPUT.PUT_LINE('Result: PASS');
+        ELSE
+            DBMS_OUTPUT.PUT_LINE('Result: FAIL');
+        END IF;
+
+        DBMS_OUTPUT.PUT_LINE('--------------------');
+    END LOOP;
+
+    CLOSE student_cursor;
+END;
+/
+```
